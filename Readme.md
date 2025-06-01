@@ -1,0 +1,5 @@
+# Running
+
+```bash
+    make start
+```
