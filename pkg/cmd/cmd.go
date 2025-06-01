@@ -7,7 +7,7 @@ import (
 	"os"
 
 	httpServer "github.com/ekowdd89/go-gin-boilerplate/pkg/httpserver"
-	"github.com/ekowdd89/go-gin-boilerplate/pkg/kafka"
+	pkgKafka "github.com/ekowdd89/go-gin-boilerplate/pkg/kafka"
 	"github.com/ekowdd89/go-gin-boilerplate/pkg/postgres"
 	"github.com/ekowdd89/go-gin-boilerplate/utils"
 )
@@ -23,6 +23,7 @@ type Cmd struct {
 
 	h *httpServer.HttpServer
 	p *postgres.Postgres
+	k *pkgKafka.Kafka
 }
 
 func New(opts ...OptsFunc) (c *Cmd, err error) {
@@ -81,9 +82,9 @@ func (c *Cmd) initServer() (err error) {
 }
 
 func (c *Cmd) initKafka() (err error) {
-	err = kafka.New(
-		kafka.WithBrokers([]string{"localhost:9092"}),
-		kafka.WithDefaultTopic("test"),
+	c.k, err = pkgKafka.New(
+		pkgKafka.WithBrokers([]string{"localhost:9092"}),
+		pkgKafka.WithDefaultTopic("test"),
 	)
 	if err != nil {
 		return fmt.Errorf("failed to init kafka: %w", err)
