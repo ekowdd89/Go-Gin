@@ -4,7 +4,7 @@
     make start
 ```
 
-# Libraby
+# Lib
 - [√] Postges
 - [√] Kafka 
 - [√] otelsql
