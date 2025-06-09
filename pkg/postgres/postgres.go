@@ -1,37 +1,35 @@
 package postgres
 
 import (
-	"context"
+	// "context"
 	"database/sql"
 	"log"
+	// "os"
 
 	_ "github.com/lib/pq" // PostgreSQL driver
 	"github.com/uptrace/opentelemetry-go-extra/otelsql"
 )
 
 type OptsFunc func(*Postgres) error
-
-func WithConnectionString(dbUrl string) OptsFunc {
-	return func(p *Postgres) (err error) {
-		p.dbUrl = dbUrl
-		p.db, err = otelsql.Open("postgres", dbUrl)
-		return
-	}
-}
-
 type Postgres struct {
-	dbUrl   string
+	// dbUrl   string
 	db      *sql.DB
 	logger  *log.Logger
-	closers []func(context.Context) error
+	// closers []func(context.Context) error
 }
 
 func New(opts ...OptsFunc) (p *Postgres, err error) {
 	p = &Postgres{
 		logger: log.Default(),
 	}
-	for _, opt := range opts {
-		opt(p)
+	for _ , opt := range opts {
+		if err := opt(p); err != nil {
+			return nil, err
+		}
+	}
+	p.db, err = otelsql.Open("postgres", "postgres://postgres:cempakamasp23@localhost:5432/sertif_test?sslmode=disable")
+	if err != nil {
+		return nil, err
 	}
 	return
 }
